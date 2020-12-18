@@ -9,7 +9,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 
 
-# TODO: Функция правки имени заказа +
+# TODO: Добавить функции
 class MainAppClass(APIView):
     parser_classes = [JSONParser]
     renderer_classes = [JSONRenderer]
@@ -17,7 +17,6 @@ class MainAppClass(APIView):
     def post(self, request):
         try:
             pass
-
             return Response(True)
         except Exception:
             return Response(False)
