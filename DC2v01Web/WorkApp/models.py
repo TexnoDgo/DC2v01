@@ -92,6 +92,7 @@ class Position(models.Model):
     sticker = models.FileField(upload_to='POSITION_STICKER', default=None)
     sticker_draw_pdf = models.FileField(upload_to='POSITION_DRAW_PDF', default=None)
     mather_assembly = models.CharField(max_length=255, default='default')
+    priority = models.IntegerField(default=0)
 
     def __str__(self):
         return self.order.title

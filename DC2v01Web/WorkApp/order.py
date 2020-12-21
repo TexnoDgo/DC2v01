@@ -18,7 +18,7 @@ def create_order(project_name, order_name, username):
 def select_order(order_name, username):
     try:
         profile = Profile.objects.get(user__username=username)
-        order = Order.obejects.get(title=order_name)
+        order = Order.objects.get(title=order_name)
         profile.active_order = order
         profile.save()
         return True
@@ -29,6 +29,9 @@ def select_order(order_name, username):
 # Изминение имени заказа пользователем
 def change_order_name(order_name, order_name2):
     try:
+        order = Order.objects.get(title=order_name)
+        order.title = order_name2
+        order.save()
         return True
     except Exception:
         return False
