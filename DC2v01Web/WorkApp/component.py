@@ -27,3 +27,17 @@ def create_component(component_name, username, c_type, material_name, thickness,
             return True
     except Exception:
         return False
+
+
+# Редактирование компонента
+def change_component(component_name, material, thickness, new_band):
+    try:
+        component = Component.objects.get(title=component_name)
+        component.material = material
+        component.thickness = thickness
+        component.band_count = new_band
+        component.save()
+
+        return True
+    except Exception:
+        return False

@@ -95,7 +95,7 @@ class Position(models.Model):
     priority = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.order.title
+        return self.order.title + " - " + self.component.title
 
 
 class CuttingPlace(models.Model):

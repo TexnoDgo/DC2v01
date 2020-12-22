@@ -1,5 +1,5 @@
 from MainApp.models import Profile
-from .models import Order, Project
+from .models import Order, Project, Position
 
 
 # Создание заказ
@@ -55,3 +55,18 @@ def get_order_list(project_name):
         return orders
     except Exception:
         return False
+
+
+# Получение списка сборок заказа
+def order_assembly_list(order_name):
+    try:
+        assembly_list = set()
+        order = Order.objects.get(title=order_name)
+        positions = Position.objects.all()
+        for position in positions:
+            assembly_list.add(position.mather_assembly)
+        return assembly_list
+    except Exception:
+        return False
+
+
