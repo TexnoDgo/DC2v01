@@ -1,0 +1,18 @@
+{
+"request-type": "position_info",
+"username": "texnodgo",
+"component_name": "Тестовый компонент №2",
+"component_type": "PART",
+"assembly": "Сборка №4",
+"material": "Д16Т",
+"thickness": "3",
+"band": "0",
+"quantity": "3",
+"operation": "Другой",
+"project_name": "Тестовый проект №1",
+"project_name2": "новое имя проекта",
+"device_name": "Маркировщик",
+"order_name": "Тестовый заказ № 1",
+"order_name2": "новое имя заказа",
+"priority": "0"
+}
