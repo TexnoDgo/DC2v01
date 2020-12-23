@@ -40,7 +40,7 @@ def qr_generator_production(code):
         img.save(img_path)
         # filename convert
         img_name = 'POSITION_QR_CODE_PRODUCTION/' + text + '.png'  # 'media/
-        print(img_path, '>', img_name)
+        #print(img_path, '>', img_name)
 
     except Exception:
         print('Error save')

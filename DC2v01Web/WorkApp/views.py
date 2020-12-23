@@ -1,8 +1,10 @@
 from random import random
+from wsgiref.util import FileWrapper
 
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.utils import timezone
+from django.http import HttpResponse
 
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
@@ -17,6 +19,7 @@ from .component import create_component, change_component
 from .position import create_position, real_position, change_position, delete_position, view_position,\
     change_operation_list, order_assembly_position_list, operation_list_for_position
 from .models import Component, OperationList
+from .send_file_file import send_comp_draw_pdf
 
 
 # TODO: Класс работы с запросами через JSON
@@ -45,7 +48,7 @@ class WorkAppClass(APIView):
             "order_name2": "новое имя заказа"
             "priority": "приоритет изготовления позиции"
             '''
-            request_type = request.data["request-type"]
+            request_type = request.data["request_type"]
             username = request.data["username"]
             component_name = request.data["component_name"]
             component_type = request.data["component_type"]
@@ -162,6 +165,23 @@ class WorkAppClass(APIView):
                 data[0] = change_component(component_name, material, thickness, band)
 
             # TODO: Добавить функцию получения информации о компоненте
+            # TODO: Добавить функцию отдачи файлов компонента
+            elif request_type == "component_info":
+                component = Component.objects.get(title=component_name)
+                print(component.author.username)
+                print(component.create)
+                print(component.c_type)
+                print(component.material)
+                print(component.thickness)
+                print(component.band_count)
+                data = {
+                    "author": component.author.username,
+                    "create": component.create,
+                    "type": component.c_type,
+                    "material": component.material,
+                    "thickness": component.thickness,
+                    "band_count": component.band_count
+                }
 
             # ------------------------------------- Действия с позициями------------------------------
             elif request_type == "create_position":
@@ -171,11 +191,13 @@ class WorkAppClass(APIView):
             elif request_type == "position_info":
                 position = view_position(order_name, component_name, assembly)
                 operation_data = operation_list_for_position(position)
-                # TODO: Добавить полную информацию о позиции, и компоненте
+                # TODO: Добавить полную информацию о позиции
+                # TODO: Добавить функцию отдачи файлов позиции
                 data = {
                     "quantity": position.quantity,
                     "operation": operation_data,
-                    "priority": position.priority
+                    "priority": position.priority,
+                    "code": position.code,
                 }
 
             elif request_type == "change_position":
@@ -213,6 +235,7 @@ class WorkAppClass(APIView):
 
 
 # TODO: Класс добавления файлов
+# TODO: Отработать все функции добавления файлов
 class AddFileToComponent(APIView):
     parser_classes = [FileUploadParser, JSONParser, FormParser, MultiPartParser]
     renderer_classes = [JSONRenderer]
@@ -220,16 +243,20 @@ class AddFileToComponent(APIView):
     def put(self, request, filename, format=None):
         try:
             file_obj = request.data['file']
+            print(filename)
+            print(filename[-7:-1])
             # Если DXF-файл
             if filename[-4:-1] == 'DXF' or filename[-4:-1] == 'dxf':
-                component_name = filename[:-4]
+                print('addDXF')
+                component_name = filename[:-5]
                 component = Component.objects.get(title=component_name)
                 component.draw_pdf = file_obj
                 component.save()
 
             # Если PDF-файл
             elif filename[-4:-1] == 'PDF' or filename[-4:-1] == 'pdf':
-                component_name = filename[:-4]
+                print('addPDF')
+                component_name = filename[:-5]
                 component = Component.objects.get(title=component_name)
                 a = random()
                 b = a * 10000000000000
@@ -241,11 +268,134 @@ class AddFileToComponent(APIView):
             # Если файл Детали или сборки
             elif filename[-7:-1] == 'SLDPRT' or filename[-7:-1] == 'sldprt' or filename[-7:-1] == 'SLDASM' \
                     or filename[-7:-1] == 'sldasm':
-                component_name = filename[:-7]
+                print('addSLDPRT')
+                component_name = filename[:-8]
+                print(component_name)
                 component = Component.objects.get(title=component_name)
                 component.part_file = file_obj
                 component.save()
 
             return Response(True)
+        except Exception:
+            return Response(False)
+
+
+# TODO: Класс отпарвки файлов
+class SendFile(APIView):
+    parser_classes = [JSONParser]
+    renderer_classes = [JSONRenderer]
+
+    def post(self, request):
+        try:
+            '''
+            request_type:
+                component_draw_pdf
+                component_draw_png
+                component_dxf
+                component_part
+                
+                order_table
+                order_qr_code_list
+                order_pdf_spec
+                order_draw_archive
+                order_dxf_archive
+                order_part_archive
+                
+                project_pdf_spec
+                
+                position_qr_code            
+                position_qr_code_prod            
+                position_sticker            
+                position_sticker_draw_pdf
+            
+            content_type:
+                pdf - application/pdf
+                dxf - image/vnd.dxf
+                png - image/png
+                sldprt - application/octet-stream
+                sldasm - application/octet-stream
+                xls - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                zip - application/zip
+                
+            '''
+            request_type = request.data["request_type"]
+            component_name = request.data["component_name"]
+            c_type = request.data["component_type"]
+
+            # -----------------------------------------Действия с компонентом------------------------------------
+            # Если запрос файла - PDF-чертеж компонента
+            if request_type == "component_draw_pdf":
+                pass
+
+            # Если запрос файла - PNG-чертеж компонента
+            elif request_type == "component_draw_png":
+                pass
+
+            # Если запрос файла - DXF-файл компонента
+            elif request_type == "component_dxf":
+                pass
+
+            # Если запрос файла - PART-файл или ASM-файл компонента
+            elif request_type == "component_part":
+                if c_type == "PART":
+                    pass
+                else:
+                    pass
+            # -----------------------------------------Действия с компонентом------------------------------------
+
+            # -------------------------------------------Действия с заказом--------------------------------------
+            #  Если запрос файла - таблица заказ
+            elif request_type == "order_table":
+                pass
+
+            #  Если запрос файла - список кодов заказ
+            elif request_type == "order_qr_code_list":
+                pass
+
+            #  Если запрос файла - спецификация заказа
+            elif request_type == "order_pdf_spec":
+                pass
+
+            #  Если запрос файла - архив чертежей заказ
+            elif request_type == "order_draw_archive":
+                pass
+
+            #  Если запрос файла - архив dxf заказа
+            elif request_type == "order_dxf_archive":
+                pass
+
+            #  Если запрос файла - архив моделей заказа
+            elif request_type == "order_part_archive":
+                pass
+            # -------------------------------------------Действия с заказом--------------------------------------
+
+            # -------------------------------------------Действия с проектом--------------------------------------
+            #  Если запрос файла - PDF-спецификая проекта
+            elif request_type == "order_part_archive":
+                pass
+
+            # -------------------------------------------Действия с проектом--------------------------------------
+
+            # -------------------------------------------Действия с позицией--------------------------------------
+            #  Если запрос файла - PNG QR-код позиции
+            elif request_type == "position_qr_code":
+                pass
+
+            #  Если запрос файла - PNG производственный QR-код позиции
+            elif request_type == "position_qr_code_prod":
+                pass
+
+            #  Если запрос файла - PNG стикер позиции
+            elif request_type == "position_sticker":
+                pass
+
+            #  Если запрос файла - PDF-чертеж производственого чертежа
+            elif request_type == "position_sticker_draw_pdf":
+                pass
+            # -------------------------------------------Действия с позицией--------------------------------------
+
+
+            #return response
+            return True
         except Exception:
             return Response(False)

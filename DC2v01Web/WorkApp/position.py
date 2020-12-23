@@ -38,6 +38,7 @@ def create_position(order_name, component_name, username, c_type, material_name,
 
         return True
     except Exception:
+        print("Ошибка создания позиции")
         return False
 
 
@@ -100,6 +101,7 @@ def check_position(order_name, component_name, assembly):
         position = Position.objects.get(order=order, component=component, mather_assembly=assembly)
         return True
     except Exception:
+        print('При проверке позиция не обнаружена')
         return False
 
 
@@ -129,6 +131,7 @@ def create_operation_list(operation_list, position):
         print('Конец создания листа операций')
         return True
     except Exception:
+
         return False
 
 
