@@ -13,11 +13,12 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 
 from .info import info, get_material_list, first_operation_list, get_device_list
-from .project import create_project, select_project, change_project_name, delete_project, get_project_list_for_device
+from .project import create_project, select_project, change_project_name, delete_project, get_project_list_with_device,\
+    get_project_list_for_device
 from .order import create_order, select_order, change_order_name, delete_order, get_order_list, order_assembly_list
 from .component import create_component, change_component
 from .position import create_position, real_position, change_position, delete_position, view_position,\
-    change_operation_list, order_assembly_position_list, operation_list_for_position
+    change_operation_list, order_assembly_position_list, operation_list_for_position, check_position
 from .models import Component, OperationList
 from .send_file_file import send_comp_draw_pdf
 
@@ -144,10 +145,10 @@ class WorkAppClass(APIView):
                 data[0] = create_project(device_name, project_name, username)
 
             elif request_type == "project_list_with_device":
-                projects = get_project_list_for_device()
+                projects = get_project_list_with_device()
                 i = 0
                 for project in projects:
-                    mini_data = {project.title: project.device.title}
+                    mini_data = {"project": project.title, "device": project.device.title}
                     data[i] = mini_data
                     i += 1
 
@@ -157,6 +158,12 @@ class WorkAppClass(APIView):
             elif request_type == "delete_project":
                 data[0] = delete_project(project_name)
 
+            elif request_type == "project_for_device":
+                projects = get_project_list_for_device(device_name)
+                i = 0
+                for project in projects:
+                    data[i] = project.title
+                    i += 1
             # -----------------------------------Действия с компонентом-------------------------------
             elif request_type == "create_component":
                 data[0] = create_component(component_name, username, component_type, material, thickness, band)
@@ -225,6 +232,9 @@ class WorkAppClass(APIView):
                     mini_data = {position.component.title: position.quantity}
                     data[i] = mini_data
                     i += 1
+
+            elif request_type == 'check_position':
+                data[0] = check_position(order_name, component_name, assembly)
 
             '''
             else:

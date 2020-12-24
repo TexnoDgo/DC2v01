@@ -18,9 +18,17 @@ def create_component(component_name, username, c_type, material_name, thickness,
     try:
 
         profile = Profile.objects.get(user__username=username)
-        material = Material.objects.get(title=material_name)
+        #material = Material.objects.get(title=material_name)
+        print("---------------------------------------------------------")
+        print(component_name)
+        print(profile)
+        print(c_type)
+        print(material_name)
+        print(thickness)
+        print(band_count)
+        print("--------------------------------------------------------")
         component = Component(title=component_name, author=profile.user, c_type=c_type,
-                              material=material, thickness=thickness, band_count=band_count)
+                              material=material_name, thickness=thickness, band_count=band_count)
         component.save()
         return component
     except Exception:

@@ -47,10 +47,27 @@ def delete_project(project_name):
         return False
 
 
-# Получение списка проектов для устройства
-def get_project_list_for_device():
+# Получение списка проектов и их устройств
+def get_project_list_with_device():
     try:
         projects = Project.objects.all()
+        return projects
+    except Exception:
+        return False
+
+
+# Получение списка проектов для выбранного устройства
+def get_project_list_for_device(device_name):
+    try:
+        print('Имя устройства: ' + device_name)
+        '''devices = Device.objects.all()
+        for device in devices:
+            print(device)
+            if device.title == device_name:
+                print('True')'''
+        device = Device.objects.get(title=device_name)
+        print('Устройство в системе: ' + device.title)
+        projects = Project.objects.filter(device=device)
         return projects
     except Exception:
         return False
