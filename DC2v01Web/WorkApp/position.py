@@ -1,6 +1,6 @@
 from django.utils.crypto import get_random_string
 
-from .models import Order, Component, Position, CuttingPlace, MachiningPlace, OtherPlace, OperationList
+from .models import Order, Project, Component, Position, CuttingPlace, MachiningPlace, OtherPlace, OperationList
 from .component import check_component, create_component
 
 from .handlers import qr_generator, qr_generator_production, create_modify_draw
@@ -194,5 +194,24 @@ def operation_list_for_position(position):
             operation_data["other"] = operation_list.other_place.title
 
         return operation_data
+    except Exception:
+        return False
+
+
+# Получение списка позиций для сборки в проекте
+def position_list_for_assembly(project_name, assembly):
+    try:
+        data = {}
+        project = Project.objects.get(title=project_name)
+        orders = Order.objects.filter(project=project)
+        i = 0
+        for order in orders:
+            positions = Position.objects.filter(order=order, mather_assembly=assembly)
+            for position in positions:
+                mini_data = {"position": position.component.title, "quantity": position.quantity,
+                             "storage": position.storage}
+                data[i] = mini_data
+                i += 1
+        return data
     except Exception:
         return False

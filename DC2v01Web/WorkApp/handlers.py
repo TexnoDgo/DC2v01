@@ -143,24 +143,27 @@ def create_work_pdf(old_pdf_file, new_pdf_file, qr_code_path, project_name, orde
     page = doc[0]
     page.insertImage(qr_rect, filename=real_qr_code_path)
 
+    font_path = os.path.join(BASE_DIR, 'static/admin/fonts/9807.ttf')
+    print("Путь к файлу шрифта: " + font_path)
+
     rc1 = page.insertTextbox(project_rect, project_text, fontsize=9,
                              fontname="FreeSans",  # a PDF standard font
-                             fontfile="C:/PP\DC2v01/DC2v01Web/static/admin/fonts/9807.ttf",
+                             fontfile=font_path,
                              # could be a file on your system
                              align=0)
     rc2 = page.insertTextbox(order_rect, order_text, fontsize=9,
                              fontname="FreeSans",  # a PDF standard font
-                             fontfile="C:/PP\DC2v01/DC2v01Web/static/admin/fonts/9807.ttf",
+                             fontfile=font_path,
                              # could be a file on your system
                              align=0)
     rc3 = page.insertTextbox(mather_assembly_rect, assembly_text, fontsize=9,
                              fontname="FreeSans",  # a PDF standard font
-                             fontfile="C:/PP\DC2v01/DC2v01Web/static/admin/fonts/9807.ttf",
+                             fontfile=font_path,
                              # could be a file on your system
                              align=0)
     rc4 = page.insertTextbox(quantity_rect, quantity_text, fontsize=9,
                              fontname="FreeSans",  # a PDF standard font
-                             fontfile="C:/PP\DC2v01/DC2v01Web/static/admin/fonts/9807.ttf",
+                             fontfile=font_path,
                              # could be a file on your system
                              align=0)
 

@@ -1,5 +1,5 @@
 from MainApp.models import Profile
-from .models import Project, Device
+from .models import Project, Device, Order, Position
 
 
 # Созданеи нового проекта для устройства
@@ -69,5 +69,23 @@ def get_project_list_for_device(device_name):
         print('Устройство в системе: ' + device.title)
         projects = Project.objects.filter(device=device)
         return projects
+    except Exception:
+        return False
+
+
+# Получения списка всех сборок проекта
+def get_assembly_for_project(project_name):
+    try:
+        assembly = set()
+
+        project = Project.objects.get(title=project_name)
+
+        orders = Order.objects.filter(project=project)
+
+        for order in orders:
+            positions = Position.objects.filter(order=order)
+            for position in positions:
+                assembly.add(position.mather_assembly)
+        return assembly
     except Exception:
         return False

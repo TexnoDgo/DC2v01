@@ -14,13 +14,14 @@ from rest_framework import status
 
 from .info import info, get_material_list, first_operation_list, get_device_list
 from .project import create_project, select_project, change_project_name, delete_project, get_project_list_with_device,\
-    get_project_list_for_device
+    get_project_list_for_device, get_assembly_for_project
 from .order import create_order, select_order, change_order_name, delete_order, get_order_list, order_assembly_list
 from .component import create_component, change_component
 from .position import create_position, real_position, change_position, delete_position, view_position,\
-    change_operation_list, order_assembly_position_list, operation_list_for_position, check_position
+    change_operation_list, order_assembly_position_list, operation_list_for_position, check_position, \
+    position_list_for_assembly
 from .models import Component, OperationList
-from .send_file_file import send_comp_draw_pdf
+from .send_file_file import send_comp_draw_pdf, send_comp_draw_png
 
 
 # TODO: Класс работы с запросами через JSON
@@ -164,6 +165,21 @@ class WorkAppClass(APIView):
                 for project in projects:
                     data[i] = project.title
                     i += 1
+
+            elif request_type == "project_list":
+                projects = get_project_list_with_device()
+                i = 0
+                for project in projects:
+                    data[i] = project.title
+                    i += 1
+
+            elif request_type == "project_assembly":
+                assembly = get_assembly_for_project(project_name)
+                i = 0
+                for asm in assembly:
+                    data[i] = asm
+                    i += 1
+
             # -----------------------------------Действия с компонентом-------------------------------
             elif request_type == "create_component":
                 data[0] = create_component(component_name, username, component_type, material, thickness, band)
@@ -235,6 +251,9 @@ class WorkAppClass(APIView):
 
             elif request_type == 'check_position':
                 data[0] = check_position(order_name, component_name, assembly)
+
+            elif request_type == "position_list_for_assembly2":
+                data = position_list_for_assembly(project_name, assembly)
 
             '''
             else:
@@ -332,6 +351,8 @@ class SendFile(APIView):
             component_name = request.data["component_name"]
             c_type = request.data["component_type"]
 
+            file = None
+
             # -----------------------------------------Действия с компонентом------------------------------------
             # Если запрос файла - PDF-чертеж компонента
             if request_type == "component_draw_pdf":
@@ -339,7 +360,7 @@ class SendFile(APIView):
 
             # Если запрос файла - PNG-чертеж компонента
             elif request_type == "component_draw_png":
-                pass
+                file = send_comp_draw_png(component_name)
 
             # Если запрос файла - DXF-файл компонента
             elif request_type == "component_dxf":
@@ -405,7 +426,7 @@ class SendFile(APIView):
             # -------------------------------------------Действия с позицией--------------------------------------
 
 
-            #return response
-            return True
+            return file
+            #return True
         except Exception:
             return Response(False)
