@@ -21,7 +21,7 @@ from .position import create_position, real_position, change_position, delete_po
     change_operation_list, order_assembly_position_list, operation_list_for_position, check_position, \
     position_list_for_assembly
 from .models import Component, OperationList
-from .send_file_file import send_comp_draw_pdf, send_comp_draw_png
+from .send_file_file import send_comp_draw_pdf, send_comp_draw_png, assembly_spec_forming
 
 
 # TODO: Класс работы с запросами через JSON
@@ -349,7 +349,10 @@ class SendFile(APIView):
             '''
             request_type = request.data["request_type"]
             component_name = request.data["component_name"]
+
             c_type = request.data["component_type"]
+            assembly = request.data["assembly"]
+            project_name = request.data["project_name"]
 
             file = None
 
@@ -425,8 +428,14 @@ class SendFile(APIView):
                 pass
             # -------------------------------------------Действия с позицией--------------------------------------
 
+            # -------------------------------------------Действия со сборкой--------------------------------------
 
-            return file
-            #return True
+            elif request_type == "project_assembly_spec":
+                file = assembly_spec_forming(project_name, assembly)
+
+            # -------------------------------------------Действия со сборкой--------------------------------------
+
+            return HttpResponse(file)
+            #return file
         except Exception:
             return Response(False)
