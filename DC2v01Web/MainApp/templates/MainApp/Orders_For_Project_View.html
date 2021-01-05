@@ -1,0 +1,42 @@
+{% extends "MainApp/base.html" %}
+{% block title %}DC2-Orders{% endblock %}
+{% block content %}
+{% load static %}
+
+<div>
+    <table border="1">
+        <thead>
+        <tr>
+            <td>№ Проекта</td>
+            <td>Название заказа</td>
+            <td>Проект</td>
+            <td>Автор</td>
+            <td>Дата создания</td>
+            <td>Дата готовности</td>
+
+            <td>Спецификация</td>
+            <td>Просмотр</td>
+        </tr>
+        </thead>
+        <tbody>
+            {% if orders %}
+            {% for order in orders %}
+            <tr>
+                <td>{{order.id}}</td>
+                <td>{{order.title}}</td>
+                <td>{{order.project}}</td>
+                <td>{{project.author}}</td>
+                <td>{{project.create}}</td>
+                <td>{{project.readiness}}</td>
+
+                <td></td>
+
+                <td><a href="#">Смотреть</a></td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -113,19 +113,22 @@ def create_operation_list(operation_list, position):
         cutting_place = CuttingPlace.objects.all()
         for place in cutting_place:
             if place.title == operation_list:
-                operation = OperationList(position=position, cutting=True, cutting_place=place)
+                operation = OperationList(position=position, cutting=True, cutting_place=place,
+                                          cutting_status="CREATE")
                 operation.save()
 
         machining_place = MachiningPlace.objects.all()
         for place in machining_place:
             if place.title == operation_list:
-                operation = OperationList(position=position, machining=True, machining_place=place)
+                operation = OperationList(position=position, machining=True, machining_place=place,
+                                          machining_status="CREATE")
                 operation.save()
 
         other_place = OtherPlace.objects.all()
         for place in other_place:
             if place.title == operation_list:
-                operation = OperationList(position=position, other=True, other_place=place)
+                operation = OperationList(position=position, other=True, other_place=place,
+                                          other_status="CREATE")
                 operation.save()
 
         print('Конец создания листа операций')

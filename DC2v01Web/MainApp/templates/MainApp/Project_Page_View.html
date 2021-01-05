@@ -1,0 +1,39 @@
+{% extends "MainApp/base.html" %}
+{% block title %}DC2-Projects{% endblock %}
+{% block content %}
+{% load static %}
+
+<div>
+    <table border="1">
+        <thead>
+        <tr>
+            <td>№ Проекта</td>
+            <td>Название проекта</td>
+            <td>Устройство</td>
+            <td>Дата создания</td>
+            <td>Автор</td>
+            <td>Активность</td>
+            <td>Спецификация</td>
+            <td>Просмотр</td>
+        </tr>
+        </thead>
+        <tbody>
+            {% if projects %}
+            {% for project in projects %}
+            <tr>
+                <td>{{project.id}}</td>
+                <td>{{project.title}}</td>
+                <td>{{project.device}}</td>
+                <td>{{project.create}}</td>
+                <td>{{project.author}}</td>
+                <td>{{project.active}}</td>
+                <td>{{project.pdf_specification}}</td>
+                <td><a href="{% url 'orders_for_project_view' pk=project.pk%}">Смотреть</a></td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

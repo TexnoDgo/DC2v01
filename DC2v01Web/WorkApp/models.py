@@ -133,20 +133,30 @@ class OtherPlace(models.Model):
 
 class OperationList(models.Model):
     STATUS_TYPE = (
+        ('NONE', 'NONE'),
         ('CREATE', 'CREATE'),
         ('WORK', 'WORK'),
         ('DONE', 'DONE'),
     )
     position = models.ForeignKey(Position, on_delete=models.CASCADE)
+
     cutting = models.BooleanField(default=False)
     cutting_place = models.ForeignKey(CuttingPlace, on_delete=models.CASCADE, null=True)
+    cutting_status = models.CharField(max_length=20, choices=STATUS_TYPE, default='NONE')
+
     machining = models.BooleanField(default=False)
     machining_place = models.ForeignKey(MachiningPlace, on_delete=models.CASCADE, null=True)
+    machining_status = models.CharField(max_length=20, choices=STATUS_TYPE, default='NONE')
+
     coating = models.BooleanField(default=False)
     coating_place = models.ForeignKey(CoatingPlace, on_delete=models.CASCADE, null=True)
+    coating_status = models.CharField(max_length=20, choices=STATUS_TYPE, default='NONE')
+
     other = models.BooleanField(default=False)
     other_place = models.ForeignKey(OtherPlace, on_delete=models.CASCADE, null=True)
-    status = models.CharField(max_length=250, choices=STATUS_TYPE, default='CREATE')
+    other_status = models.CharField(max_length=20, choices=STATUS_TYPE, default='NONE')
+
+    general_status = models.CharField(max_length=20, choices=STATUS_TYPE, default='CREATE')
 
     def __str__(self):
         return self.position.component.title + "-operation"

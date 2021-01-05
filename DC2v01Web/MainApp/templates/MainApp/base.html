@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+    <body>
+        <a href="{% url 'project_page_view' %}">PROJECTS</a>
+        {% block content %}
+
+        {% endblock %}
+    </body>
+</html>
