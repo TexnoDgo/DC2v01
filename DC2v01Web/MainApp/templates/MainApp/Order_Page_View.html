@@ -1,0 +1,129 @@
+{% extends "MainApp/base.html" %}
+{% block title %}DC2-Order{% endblock %}
+{% block content %}
+{% load static %}
+
+<div>
+    <table border="1"  class="table">
+        <thead>
+        <tr>
+            <td>№</td>
+            <td>Наименование</td>
+            <td>Автор компонента</td>
+            <td>Создан компонент</td>
+            <td>Тип</td>
+            <td>Материал</td>
+            <td>Толщина</td>
+            <td>Кол-во гибов</td>
+            <td>Чертеж</td>
+
+            <td>Кол-во деталей</td>
+            <td>Приоритет</td>
+            <td>Место хранения</td>
+            <td>QR-код</td>
+            <td>QR-код пр.</td>
+
+            <td>Статус позиции</td>
+        </tr>
+        </thead>
+        <tbody align="center" valign="middle">
+            <!-- ------------------------------------Позиции для лазерной резки------------------------------------ -->
+            {% for place in cutting_place %}
+                <tr class="table-info">
+                    <td colspan="14" >{{place}}</td>
+                    <td><a class="btn btn-primary" href="#">Проверка</a></td>
+                </tr>
+                {% for operation in operations %}
+                    {% if operation.cutting == True %}
+                        {% if operation.cutting_place == place %}
+                            <tr>
+                                <td>{{operation.position.component.id}}</td>
+                                <td>{{operation.position.component.title}}</td>
+                                <td>{{operation.position.component.author}}</td>
+                                <td>{{operation.position.component.create}}</td>
+                                <td>{{operation.position.component.c_type}}</td>
+                                <td>{{operation.position.component.material}}</td>
+                                <td>{{operation.position.component.thickness}}</td>
+                                <td>{{operation.position.component.band_count}}</td>
+                                <td><a href="{{operation.position.component.draw_pdf.url}}">смотреть</a></td>
+                                <td>{{operation.position.quantity}}</td>
+                                <td>{{operation.position.priority}}</td>
+                                <td>{{operation.position.storage}}</td>
+                                <td><img src="{{operation.position.qr_code.url}}" height="100px"></td>
+                                <td><img src="{{operation.position.qr_code_production.url}}" height="100px"></td>
+                                <td>Статус позиции</td>
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+
+            <!-- ------------------------------------Позиции для механообработки------------------------------------ -->
+            {% for place in machining_place %}
+                <tr class="table-success">
+                    <td colspan="13">{{place}}</td>
+                    <td><a class="btn btn-primary">Проверить</a></td>
+                    <td><a>Отправить</a></td>
+                </tr>
+                {% for operation in operations %}
+                    {% if operation.machining == True %}
+                        {% if operation.machining_place == place %}
+                            <tr>
+                                <td>{{operation.position.component.id}}</td>
+                                <td>{{operation.position.component.title}}</td>
+                                <td>{{operation.position.component.author}}</td>
+                                <td>{{operation.position.component.create}}</td>
+                                <td>{{operation.position.component.c_type}}</td>
+                                <td>{{operation.position.component.material}}</td>
+                                <td>{{operation.position.component.thickness}}</td>
+                                <td>{{operation.position.component.band_count}}</td>
+                                <td><a href="{{operation.position.component.draw_pdf.url}}">смотреть</a></td>
+                                <td>{{operation.position.quantity}}</td>
+                                <td>{{operation.position.priority}}</td>
+                                <td>{{operation.position.storage}}</td>
+                                <td><img src="{{operation.position.qr_code.url}}" height="100px"></td>
+                                <td><img src="{{operation.position.qr_code_production.url}}" height="100px"></td>
+                                <td>Статус позиции</td>
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+
+            <!-- ------------------------------------------Позиции для другие--------------------------------------- -->
+            {% for place in other_place %}
+                <tr class="table-secondary">
+                    <td colspan="13">{{place}}</td>
+                    <td><a class="btn btn-primary">Проверить</a></td>
+                    <td><a>Отправить</a></td>
+                </tr>
+                {% for operation in operations %}
+                    {% if operation.other == True %}
+                        {% if operation.other_place == place %}
+                            <tr>
+                                <td>{{operation.position.component.id}}</td>
+                                <td>{{operation.position.component.title}}</td>
+                                <td>{{operation.position.component.author}}</td>
+                                <td>{{operation.position.component.create}}</td>
+                                <td>{{operation.position.component.c_type}}</td>
+                                <td>{{operation.position.component.material}}</td>
+                                <td>{{operation.position.component.thickness}}</td>
+                                <td>{{operation.position.component.band_count}}</td>
+                                <td><a href="{{operation.position.component.draw_pdf.url}}">смотреть</a></td>
+                                <td>{{operation.position.quantity}}</td>
+                                <td>{{operation.position.priority}}</td>
+                                <td>{{operation.position.storage}}</td>
+                                <td><img src="{{operation.position.qr_code.url}}" height="100px"></td>
+                                <td><img src="{{operation.position.qr_code_production.url}}" height="100px"></td>
+                                <td>Статус позиции</td>
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

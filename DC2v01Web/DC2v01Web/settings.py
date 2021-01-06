@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     'WorkApp',
     # InstallApp
     'rest_framework',
+    'crispy_forms',
+    'bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -107,3 +109,5 @@ LOCALE_PATHS = (
 )
 
 APPEND_SLASH = False
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

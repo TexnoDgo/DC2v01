@@ -25,13 +25,13 @@
                 <td>{{order.id}}</td>
                 <td>{{order.title}}</td>
                 <td>{{order.project}}</td>
-                <td>{{project.author}}</td>
-                <td>{{project.create}}</td>
-                <td>{{project.readiness}}</td>
+                <td>{{order.author}}</td>
+                <td>{{order.create}}</td>
+                <td>{{order.readiness}}</td>
 
                 <td></td>
 
-                <td><a href="#">Смотреть</a></td>
+                <td><a href="{% url 'order_page_view' pk=order.pk %}">Смотреть</a></td>
             </tr>
             {% endfor %}
             {% endif %}
