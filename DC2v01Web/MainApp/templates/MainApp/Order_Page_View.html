@@ -3,7 +3,7 @@
 {% block content %}
 {% load static %}
 
-<div>
+<div class="col">
     <table border="1"  class="table">
         <thead>
         <tr>
@@ -31,7 +31,7 @@
             {% for place in cutting_place %}
                 <tr class="table-info">
                     <td colspan="14" >{{place}}</td>
-                    <td><a class="btn btn-primary" href="#">Проверка</a></td>
+                    <td><a class="btn btn-primary" href="{% url 'check_operation_order' pk=order.pk operation_pk=place.id operation_name='cut' %}">Проверка</a></td>
                 </tr>
                 {% for operation in operations %}
                     {% if operation.cutting == True %}
@@ -62,8 +62,7 @@
             {% for place in machining_place %}
                 <tr class="table-success">
                     <td colspan="13">{{place}}</td>
-                    <td><a class="btn btn-primary">Проверить</a></td>
-                    <td><a>Отправить</a></td>
+                    <td><a class="btn btn-primary" href="{% url 'check_operation_order' pk=order.pk operation_pk=place.id operation_name='mach' %}">Проверка</a></td>
                 </tr>
                 {% for operation in operations %}
                     {% if operation.machining == True %}
@@ -94,8 +93,7 @@
             {% for place in other_place %}
                 <tr class="table-secondary">
                     <td colspan="13">{{place}}</td>
-                    <td><a class="btn btn-primary">Проверить</a></td>
-                    <td><a>Отправить</a></td>
+                    <td><a class="btn btn-primary" href="{% url 'check_operation_order' pk=order.pk operation_pk=place.id operation_name='oth' %}">Проверка</a></td>
                 </tr>
                 {% for operation in operations %}
                     {% if operation.other == True %}

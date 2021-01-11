@@ -102,6 +102,7 @@ class Position(models.Model):
 class CuttingPlace(models.Model):
     title = models.CharField(max_length=250)
     email = models.EmailField()
+    identification = models.CharField(max_length=50, default='cut')
 
     def __str__(self):
         return self.title
@@ -110,6 +111,7 @@ class CuttingPlace(models.Model):
 class MachiningPlace(models.Model):
     title = models.CharField(max_length=250)
     email = models.EmailField()
+    identification = models.CharField(max_length=50, default='mach')
 
     def __str__(self):
         return self.title
@@ -118,6 +120,7 @@ class MachiningPlace(models.Model):
 class CoatingPlace(models.Model):
     title = models.CharField(max_length=250)
     email = models.EmailField()
+    identification = models.CharField(max_length=50, default='coa')
 
     def __str__(self):
         return self.title
@@ -126,6 +129,7 @@ class CoatingPlace(models.Model):
 class OtherPlace(models.Model):
     title = models.CharField(max_length=250)
     email = models.EmailField()
+    identification = models.CharField(max_length=50, default='oth')
 
     def __str__(self):
         return self.title
@@ -157,6 +161,8 @@ class OperationList(models.Model):
     other_status = models.CharField(max_length=20, choices=STATUS_TYPE, default='NONE')
 
     general_status = models.CharField(max_length=20, choices=STATUS_TYPE, default='CREATE')
+
+    notes = models.CharField(max_length=255, default='None')
 
     def __str__(self):
         return self.position.component.title + "-operation"

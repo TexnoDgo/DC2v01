@@ -111,3 +111,11 @@ LOCALE_PATHS = (
 APPEND_SLASH = False
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'detail.control.2@gmail.com'
+EMAIL_HOST_PASSWORD = 'fCGRWEBY13241v1xf'

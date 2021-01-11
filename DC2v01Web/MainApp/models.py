@@ -17,6 +17,10 @@ class Profile(models.Model):
     root_status = models.CharField(max_length=100, choices=ROOT_STATUS_LIST, default='GUEST')
     active_project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
     active_order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
+    phone = models.CharField(max_length=20, default='+38(099) 099-99-99')
+    new_email = models.CharField(max_length=100, default='new_net@gmail.com')
+    profile_user_name = models.CharField(max_length=20, default='Имя')
+    profile_user_last = models.CharField(max_length=20, default='Фамилия')
 
     def __str__(self):
         return "Profile: " + self.user.username
